@@ -1,0 +1,52 @@
+// Global styles for Training Tracker
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #fafafa;
+}
+
+// Dark theme
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #ffffff;
+  }
+}
+
+// Remove tap highlight on mobile
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Fix iOS scrolling
+.app-content {
+  -webkit-overflow-scrolling: touch;
+}
+
+// PWA safe area support
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+// Keyboard adjustment for iOS
+input:focus,
+textarea:focus {
+  font-size: 16px; // Prevents zoom on iOS
+}
