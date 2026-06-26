@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
 import { DbService } from '../../core/services/db.service';
 import { BackupService } from '../../core/services/backup.service';
 import { AppSettings } from '../../core/models/settings.model';
@@ -22,7 +23,8 @@ import { AppSettings } from '../../core/models/settings.model';
     MatSelectModule,
     MatFormFieldModule,
     MatSlideToggleModule,
-    MatDividerModule
+    MatDividerModule,
+    MatInputModule
   ],
   template: `
     <div class="settings-container">
