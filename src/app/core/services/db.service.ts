@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
-import { Exercise, WorkoutTemplate, WorkoutTemplateExercise } from '../models/exercise.model';
+import { Exercise } from '../models/exercise.model';
+import { WorkoutTemplate, WorkoutTemplateExercise } from '../models/workout.model';
 import { WorkoutSession, WorkoutSet } from '../models/workout.model';
 import { AppSettings } from '../models/settings.model';
 import { SEED_EXERCISES, SEED_TEMPLATES, DEFAULT_SETTINGS } from '../constants/seed-data';
