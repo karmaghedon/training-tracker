@@ -171,6 +171,7 @@ export class TemplatesComponent implements OnInit {
     template.updatedAt = new Date();
 
     await this.db.workoutTemplates.put(template);
+    await this.db.workoutTemplateExercises.add(exercise);
 
     this.selectedExerciseId = '';
     await this.loadData();
