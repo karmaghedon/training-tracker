@@ -31,7 +31,8 @@
             "extractLicenses": false,
             "sourceMap": true,
             "namedChunks": true,
-            "serviceWorker": "ngsw-config.json"
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
