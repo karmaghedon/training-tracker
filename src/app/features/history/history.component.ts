@@ -33,12 +33,11 @@ import { WorkoutSession } from '../../core/models/workout.model';
             </div>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button (click)="deleteWorkout(workout.id as any)">
+             <button mat-button (click)="deleteWorkout(workout.id)">
               <mat-icon>delete</mat-icon>
-              Delete
-            </button>
+                Delete
+             </button>
           </mat-card-actions>
-        </mat-card>
       </div>
 
       <div *ngIf="workouts.length === 0" class="no-data">
