@@ -82,22 +82,12 @@ export class DbService extends Dexie {
   }
 
   async clearAllData(): Promise<void> {
-    await this.transaction(
-      'rw',
-      this.exercises,
-      this.workoutTemplates,
-      this.workoutTemplateExercises,
-      this.workoutSessions,
-      this.workoutSets,
-      this.settings,
-      async () => {
-        await this.exercises.clear();
-        await this.workoutTemplates.clear();
-        await this.workoutTemplateExercises.clear();
-        await this.workoutSessions.clear();
-        await this.workoutSets.clear();
-        await this.settings.clear();
-      }
-    );
+  await this.exercises.clear();
+  await this.workoutTemplates.clear();
+  await this.workoutTemplateExercises.clear();
+  await this.workoutSessions.clear();
+  await this.workoutSets.clear();
+  await this.settings.clear();
+}
   }
 }
