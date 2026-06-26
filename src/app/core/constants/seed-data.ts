@@ -1,4 +1,5 @@
-import { Exercise, WorkoutTemplate, WorkoutTemplateExercise } from '../models/exercise.model';
+import { Exercise } from '../models/exercise.model';
+import { WorkoutTemplate, WorkoutTemplateExercise } from '../models/workout.model';
 import { AppSettings } from '../models/settings.model';
 
 // Simple UUID generator
