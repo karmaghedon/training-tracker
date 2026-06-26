@@ -51,7 +51,7 @@ import {
             <input matInput [(ngModel)]="newTemplateDescription">
           </mat-form-field>
 
-          <button mat-raised-button (click)="createTemplate()">
+          <button mat-raised-button color="primary" (click)="createTemplate()">
             Create Template
           </button>
         </mat-card-content>
@@ -73,14 +73,15 @@ import {
             </mat-select>
           </mat-form-field>
 
-          <button mat-button (click)="addExercise(template)">
+          <button mat-button color="primary" (click)="addExercise(template)">
             Add Exercise
           </button>
 
           <mat-list>
             <mat-list-item *ngFor="let ex of template.exercises">
-              {{ getExerciseName(ex.exerciseId) }}
+              {{ ex.exerciseName || getExerciseName(ex.exerciseId) }}
               — {{ ex.targetSets }}x{{ ex.targetReps }}
+              — {{ ex.defaultWeight }} {{ ex.unit }}
             </mat-list-item>
           </mat-list>
         </mat-card-content>
@@ -114,25 +115,25 @@ export class TemplatesComponent implements OnInit {
 
   constructor(private db: DbService) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     await this.loadData();
   }
 
-  async loadData() {
+  async loadData(): Promise<void> {
     this.templates = await this.db.workoutTemplates.toArray();
     this.exercises = await this.db.exercises.toArray();
   }
 
-  async createTemplate() {
+  async createTemplate(): Promise<void> {
     if (!this.newTemplateName.trim()) return;
 
     const template: WorkoutTemplate = {
       id: crypto.randomUUID(),
-      name: this.newTemplateName,
-      description: this.newTemplateDescription,
+      name: this.newTemplateName.trim(),
+      description: this.newTemplateDescription.trim(),
       exercises: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
     await this.db.workoutTemplates.add(template);
@@ -143,23 +144,31 @@ export class TemplatesComponent implements OnInit {
     await this.loadData();
   }
 
-  async addExercise(template: WorkoutTemplate) {
+  async addExercise(template: WorkoutTemplate): Promise<void> {
     if (!this.selectedExerciseId) return;
+
+    const selectedExercise = this.exercises.find(
+      exercise => exercise.id === this.selectedExerciseId
+    );
+
+    if (!selectedExercise) return;
 
     const exercise: WorkoutTemplateExercise = {
       id: crypto.randomUUID(),
       templateId: template.id,
-      exerciseId: this.selectedExerciseId,
+      exerciseId: selectedExercise.id,
+      exerciseName: selectedExercise.name,
       order: template.exercises.length + 1,
       targetSets: 3,
       targetReps: 10,
       defaultWeight: 0,
+      unit: 'lb',
       restSeconds: 90,
       notes: ''
     };
 
     template.exercises.push(exercise);
-    template.updatedAt = new Date().toISOString();
+    template.updatedAt = new Date();
 
     await this.db.workoutTemplates.put(template);
 
