@@ -24,7 +24,7 @@ import { WorkoutTemplate, WorkoutSession } from '../../core/models/workout.model
         <mat-card-header>
           <mat-card-title>{{ template.name }}</mat-card-title>
           <mat-card-subtitle>
-            {{ template.exercises?.length || 0 }} exercises
+            {{ template.exercises.length }} exercises
           </mat-card-subtitle>
         </mat-card-header>
 
