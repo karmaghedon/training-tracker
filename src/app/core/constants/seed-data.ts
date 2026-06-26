@@ -1,15 +1,21 @@
 import { Exercise } from '../models/exercise.model';
-import { WorkoutTemplate, WorkoutTemplateExercise } from '../models/workout.model';
+import {
+  WorkoutTemplate,
+  WorkoutTemplateExercise
+} from '../models/workout.model';
 import { AppSettings } from '../models/settings.model';
 
-// Simple UUID generator
 function generateId(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
+  return crypto.randomUUID();
 }
+
+type SeedExerciseConfig = {
+  name: string;
+  sets: number;
+  reps: number | 'max';
+  weight: number;
+  rest: number;
+};
 
 export const SEED_EXERCISES: Exercise[] = [
   {
@@ -179,28 +185,40 @@ export const SEED_EXERCISES: Exercise[] = [
   }
 ];
 
-// Create template exercises for each template
+function buildTemplateExercises(
+  templateId: string,
+  exercises: SeedExerciseConfig[]
+): WorkoutTemplateExercise[] {
+  const exerciseMap = new Map(SEED_EXERCISES.map(e => [e.name, e]));
+
+  return exercises.map((ex, index) => {
+    const matchedExercise = exerciseMap.get(ex.name);
+
+    return {
+      id: generateId(),
+      templateId,
+      exerciseId: matchedExercise?.id || '',
+      exerciseName: ex.name,
+      order: index + 1,
+      targetSets: ex.sets,
+      targetReps: ex.reps === 'max' ? 0 : ex.reps,
+      defaultWeight: ex.weight,
+      unit: 'lb',
+      restSeconds: ex.rest,
+      notes: ex.reps === 'max' ? 'AMRAP / max reps' : ''
+    };
+  });
+}
+
 function createTemplateExercises(): {
   templates: WorkoutTemplate[];
   templateExercises: WorkoutTemplateExercise[];
 } {
-  const templateExercisesArray: WorkoutTemplateExercise[] = [];
-
-  // Find exercise IDs
-  const exerciseMap = new Map(SEED_EXERCISES.map(e => [e.name, e.id]));
-
-  // Workout A
   const templateAId = generateId();
-  const templateA: WorkoutTemplate = {
-    id: templateAId,
-    name: 'Workout A',
-    description: 'Lower body focus with upper body volume',
-    exercises: [],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
+  const templateBId = generateId();
+  const templateCId = generateId();
 
-  const exercisesA = [
+  const exercisesA: SeedExerciseConfig[] = [
     { name: 'Goblet Squat', sets: 3, reps: 10, weight: 35, rest: 90 },
     { name: 'Glute Bridge', sets: 3, reps: 10, weight: 185, rest: 60 },
     { name: 'Bench Press', sets: 3, reps: 10, weight: 185, rest: 180 },
@@ -210,32 +228,7 @@ function createTemplateExercises(): {
     { name: 'Face Pull', sets: 2, reps: 15, weight: 30, rest: 60 }
   ];
 
-  exercisesA.forEach((ex, idx) => {
-    templateExercisesArray.push({
-      id: generateId(),
-      templateId: templateAId,
-      exerciseId: exerciseMap.get(ex.name) || '',
-      order: idx,
-      targetSets: ex.sets,
-      targetReps: ex.reps,
-      defaultWeight: ex.weight,
-      restSeconds: ex.rest,
-      notes: ''
-    });
-  });
-
-  // Workout B
-  const templateBId = generateId();
-  const templateB: WorkoutTemplate = {
-    id: templateBId,
-    name: 'Workout B',
-    description: 'Upper body focus with lower body volume',
-    exercises: [],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  const exercisesB = [
+  const exercisesB: SeedExerciseConfig[] = [
     { name: 'Romanian Deadlift', sets: 3, reps: 10, weight: 275, rest: 180 },
     { name: 'Front Squat', sets: 3, reps: 10, weight: 185, rest: 180 },
     { name: 'Incline Dumbbell Press', sets: 3, reps: 10, weight: 65, rest: 90 },
@@ -245,32 +238,7 @@ function createTemplateExercises(): {
     { name: 'Triceps Extension', sets: 2, reps: 10, weight: 40, rest: 60 }
   ];
 
-  exercisesB.forEach((ex, idx) => {
-    templateExercisesArray.push({
-      id: generateId(),
-      templateId: templateBId,
-      exerciseId: exerciseMap.get(ex.name) || '',
-      order: idx,
-      targetSets: ex.sets,
-      targetReps: ex.reps,
-      defaultWeight: ex.weight,
-      restSeconds: ex.rest,
-      notes: ''
-    });
-  });
-
-  // Workout C
-  const templateCId = generateId();
-  const templateC: WorkoutTemplate = {
-    id: templateCId,
-    name: 'Workout C',
-    description: 'Full body strength focus',
-    exercises: [],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  const exercisesC = [
+  const exercisesC: SeedExerciseConfig[] = [
     { name: 'Front Squat', sets: 3, reps: 8, weight: 185, rest: 180 },
     { name: 'Bench Press', sets: 3, reps: 8, weight: 205, rest: 180 },
     { name: 'Romanian Deadlift', sets: 3, reps: 8, weight: 295, rest: 180 },
@@ -279,23 +247,44 @@ function createTemplateExercises(): {
     { name: 'Face Pull', sets: 2, reps: 15, weight: 30, rest: 60 }
   ];
 
-  exercisesC.forEach((ex, idx) => {
-    templateExercisesArray.push({
-      id: generateId(),
-      templateId: templateCId,
-      exerciseId: exerciseMap.get(ex.name) || '',
-      order: idx,
-      targetSets: ex.sets,
-      targetReps: ex.reps,
-      defaultWeight: ex.weight,
-      restSeconds: ex.rest,
-      notes: ''
-    });
-  });
+  const templateExercisesA = buildTemplateExercises(templateAId, exercisesA);
+  const templateExercisesB = buildTemplateExercises(templateBId, exercisesB);
+  const templateExercisesC = buildTemplateExercises(templateCId, exercisesC);
+
+  const templateA: WorkoutTemplate = {
+    id: templateAId,
+    name: 'Workout A',
+    description: 'Lower body focus with upper body volume',
+    exercises: templateExercisesA,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  const templateB: WorkoutTemplate = {
+    id: templateBId,
+    name: 'Workout B',
+    description: 'Upper body focus with lower body volume',
+    exercises: templateExercisesB,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  const templateC: WorkoutTemplate = {
+    id: templateCId,
+    name: 'Workout C',
+    description: 'Full body strength focus',
+    exercises: templateExercisesC,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
 
   return {
     templates: [templateA, templateB, templateC],
-    templateExercises: templateExercisesArray
+    templateExercises: [
+      ...templateExercisesA,
+      ...templateExercisesB,
+      ...templateExercisesC
+    ]
   };
 }
 
