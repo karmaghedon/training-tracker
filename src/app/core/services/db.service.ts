@@ -89,5 +89,5 @@ export class DbService extends Dexie {
   await this.workoutSets.clear();
   await this.settings.clear();
 }
-  }
+  
 }
