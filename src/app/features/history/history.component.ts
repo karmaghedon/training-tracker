@@ -38,6 +38,7 @@ import { WorkoutSession } from '../../core/models/workout.model';
                 Delete
              </button>
           </mat-card-actions>
+          </mat-card>
       </div>
 
       <div *ngIf="workouts.length === 0" class="no-data">
