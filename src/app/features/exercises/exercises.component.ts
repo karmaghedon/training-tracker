@@ -119,11 +119,17 @@ export class ExercisesComponent implements OnInit {
     await this.loadExercises();
   }
 
-  async loadExercises() {
-    this.exercises = await this.db.exercises.where('isActive').equals(true).toArray();
-    this.muscleGroups = [...new Set(this.exercises.map(e => e.primaryMuscleGroup))].sort();
-    this.filterExercises();
-  }
+  async loadExercises(): Promise<void> {
+  const allExercises = await this.db.exercises.toArray();
+
+  this.exercises = allExercises.filter(exercise => exercise.isActive);
+
+  this.muscleGroups = [
+    ...new Set(this.exercises.map(e => e.primaryMuscleGroup))
+  ].sort();
+
+  this.filterExercises();
+}
 
   filterExercises() {
     if (!this.selectedMuscleGroup) {
