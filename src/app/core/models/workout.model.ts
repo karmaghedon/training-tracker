@@ -25,3 +25,26 @@ export interface WorkoutSet {
   notes: string;
   timestamp: Date;
 }
+
+export interface WorkoutTemplate {
+  id: string;
+  name: string;
+  description: string;
+  exercises: WorkoutTemplateExercise[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface WorkoutTemplateExercise {
+  id: string;
+  templateId: string;
+  exerciseId: string;
+  exerciseName: string;
+  order: number;
+  targetSets: number;
+  targetReps: number;
+  defaultWeight: number;
+  unit: 'lb' | 'kg';
+  restSeconds: number;
+  notes: string;
+}
