@@ -155,12 +155,13 @@ export class AppComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.db.initializeDatabase();
-    this.router.events.subscribe(() => {
-      this.activeRoute = this.router.url;
-    });
-  }
+  async ngOnInit(): Promise<void> {
+  await this.db.initializeDatabase();
+
+  this.router.events.subscribe(() => {
+    this.activeRoute = this.router.url;
+  });
+}
 
   navigate(route: string) {
     this.activeRoute = route;
