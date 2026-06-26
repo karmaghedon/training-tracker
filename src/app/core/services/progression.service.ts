@@ -55,14 +55,14 @@ export class ProgressionService {
    * Get best estimated 1RM for an exercise
    */
   async getBestEstimated1RM(exerciseId: string): Promise<number> {
-    const sets = await this.getExerciseHistory(exerciseId);
-    if (sets.length === 0) return 0;
+   const sets = await this.getExerciseHistory(exerciseId);
+   const completedSets = sets.filter(s => s.completed);
 
-    return Math.max(
-      ...sets
-        .filter(s => s.completed)
-        .map(s => this.calculateEstimated1RM(s.weight, s.reps))
-    );
+   if (completedSets.length === 0) return 0;
+
+   return Math.max(
+    ...completedSets.map(s => this.calculateEstimated1RM(s.weight, s.reps))
+   );
   }
 
   /**
