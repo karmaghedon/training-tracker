@@ -12,7 +12,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { DbService } from '../../core/services/db.service';
 import { ProgressionService } from '../../core/services/progression.service';
 import { WorkoutSession, WorkoutSet } from '../../core/models/workout.model';
-import { Exercise, WorkoutTemplateExercise } from '../../core/models/exercise.model';
+import { Exercise } from '../../core/models/exercise.model';
+import { WorkoutTemplateExercise } from '../../core/models/workout.model';
 
 @Component({
   selector: 'app-workout-session',
