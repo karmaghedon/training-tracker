@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DbService } from '../../core/services/db.service';
-import { WorkoutTemplate } from '../../core/models/exercise.model';
+import { WorkoutTemplate } from '../../core/models/workout.model';
 import { WorkoutSession } from '../../core/models/workout.model';
 
 @Component({
